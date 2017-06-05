@@ -1,0 +1,65 @@
+{{#each articles}}
+
+<ul class="collapsible" data-collapsible="accordion">
+
+  <li>
+    <div>
+      {{title}}
+    </div>
+    <div class="collapsible-body">
+      {{summary}}
+      <p><a href="{{link}}" target="_new">Click here</a> to read the full article</p>
+    </div>
+  </li>
+
+  <li>
+      <div class="collapse-header">
+        Add a Comment
+      </div>
+      <div class="collapse-body">
+        <form id="form-add-{{_id}}" action="add/comment/{{_id}}" method="post">
+          <div class="row">
+            <div class="input-field col-sm-2"></div>
+            <div class="input-field col-sm-8">
+              <input id="author_name" type="text" name="name" class="author">
+              <label for="author_name">Enter Your Name:</label>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="input-field col-sm-2"></div>
+            <div class="input-field col-sm-8">
+              <input id="author_comment" type="text" name="comment" class="textarea">
+              <label for="author_comment">Enter Your Comment:</label>
+            </div>
+          </div>
+        </form>
+      </div>
+  </li>
+  <li>
+    <div class="collapsible-header">View Comments</div>
+    <div class="collapse-body">
+       {{#if comments}}
+      <ul class="collection">
+        {{#each comments}}
+        <li class="collection-item">
+          <b>{{author}}</b>
+
+          <span class="badge">
+            <form id="form-delete-{{_id}}" action="remove/comment/{{_id}}" method="post">
+              <input class="btn=small delete-comment-button" data-id="{{_id}}" type="submit" value="Delete" >
+            </form>
+          </span>
+
+          {{content}}
+        </li>
+      </ul>
+      {{else}}
+        <p>No Comments</p>
+    {{/if}}
+    </div>
+   
+  </li>
+
+</ul>
+{{/each}}
