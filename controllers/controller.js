@@ -17,75 +17,102 @@ var comment = require("../models/comment.js");
 var article = require("../models/article.js");
 
 
-// Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
-db.on("error", function(error) {
-	console.log("Database Error:", error);
-});
+// // Hook mongojs configuration to the db variable
+// var db = mongojs(databaseUrl, collections);
+// db.on("error", function(error) {
+// 	console.log("Database Error:", error);
+// });
 
 
 // Index file
 router.get("/", function(req, res){
 	// res.redirect("/scrape");
-	res.render("index", hbsObject);
 	console.log("hit");
-});
+	// res.send('ok');
+	res.render('index', {
+		articles: [
+			{ 
+				title: 'value',
+				summary: 'value',
+				link: 'value'
 
-// Retrieve data from the db
-router.get("/articles", function(req, res) {
-  // Find all results from the scrapedData collection in the db
-  db.scrapedData.find({}, function(error, found) {
-    // Throw any errors to the console
-    if (error) {
-      console.log(error);
-    }
-    // If there are no errors, send the data to the browser as a json
-    else {
-      res.json(found);
-    }
-  });
+			}
+		]
+	});
 });
 
 
 // Web Scraping
-router.get("/scrape", function(req, res) {
+router.get("/scrape", function(req, res, next) {
   // Make a request for the news section of ycombinator
+
+  var requestPromise = new Promise(function(resolve, reject){
+
   request("https://techcrunch.com/", function(error, response, html) {
+  	// console.log(html);
+	var data = [];
     // Load the html body from request into cheerio
     var $ = cheerio.load(html);
     // For each element with a "title" class
     $(".post-title").each(function(i, element) {
-      // Save the text of each link enclosed in the current element
-      var title = $(this).children("a").text();
-      // Save the href value of each link enclosed in the current element
-      var link = $(this).children("a").attr("href");
 
-      // If this title element had both a title and a link
-      if (title && link) {
-        // Save the data in the scrapedData db
-        db.scrapedData.save({
-          title: title,
-          link: link
-        },
-        function(error, saved) {
-          // If there's an error during this query
-          if (error) {
-            // Log the error
-            console.log(error);
-          }
-          // Otherwise,
-          else {
-            // Log the saved data
-            console.log(saved);
-          }
-        });
-      }
-    });
+    	var result = {};
+      	// Save the text of each link enclosed in the current element
+    	result.title = $(element).find("a").text();
+
+      	// Save the href value of each link enclosed in the current element
+      	result.link = $(element).find("a").attr("href");
+
+      	// Using our Article model, create a new entry
+      // This effectively passes the result object to the entry (and the title and link)
+      var entry = new article(result);
+      // Now, save that entry to the db
+
+      entry.save(function(err, doc) {
+      	// Log error
+      	if (err) {
+      		console.log(err);
+      	}
+      	// Or log the doc
+      	else {
+      		console.log(doc);
+      		res.json(doc);
+      		data.push(doc);
+      	}
+
+      }); // closes save
+
+	}); // this closes the  each 
+
+    resolve(data);
+  }); // this closes request
+
+	}); // this closes the promise
+
+
+  	requestPromise.then(function(data){
+  		console.log('this is the data');
+  		console.log(data);
+	  res.send(data);
   });
 
   // This will send a "Scrape Complete" message to the browser
-  res.send("Scrape Complete");
 });
+
+router.get("/articles", function(req, res) {
+  // Grab every doc in the Articles array
+  article.find({}, function(error, doc) {
+    // Log any errors
+    if (error) {
+      console.log(error);
+    }
+    // Or send the doc to the browser as a json object
+    else {
+      res.json(doc);
+    }
+  });
+});
+
 
 // Add a Routing Comment
 

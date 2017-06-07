@@ -12,26 +12,26 @@ var ArticleSchema = new Schema({
 
   // Title of Article
   title: {
-    type: String,
-    required: true
+    type: String
+    // required: true
   },
 
   // Link to Article
   link: {
-    type: String,
-    required: true
+    type: String
+    // required: true
   },
   
   // Summary of Article
   summary: {
-    type: String,
-    required: true
+    type: String
+    // required: true
   },
 
   // Date of article scrape (saving as a string to pretify it in Moment-JS)
   updated: {
-    type: String,
-    default: moment().format('MMMM Do YYYY, h:mm A')
+    type: String
+    // default: moment().format('MMMM Do YYYY, h:mm A')
   },
 
   // Create a relation with the Comment model

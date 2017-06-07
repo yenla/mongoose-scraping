@@ -33,15 +33,22 @@
               <label for="author_comment">Enter Your Comment:</label>
             </div>
           </div>
+            <div class="row">
+              <div class="input-field col-sm-2"></div>
+              <div class="input-field col-sm-8">
+              <center><input class="btn add-comment-button" data-id="{{_id}}" type="submit" value="Submit"></center>
+              </div>
+            </div>
+
         </form>
       </div>
   </li>
   <li>
     <div class="collapsible-header">View Comments</div>
     <div class="collapse-body">
-       {{#if comments}}
+       {{!-- {{#if comments}} --}}
       <ul class="collection">
-        {{#each comments}}
+        {{!-- {{#each comments}} --}}
         <li class="collection-item">
           <b>{{author}}</b>
 
@@ -56,7 +63,7 @@
       </ul>
       {{else}}
         <p>No Comments</p>
-    {{/if}}
+    {{!-- {{/if}} --}}
     </div>
    
   </li>
