@@ -45,59 +45,33 @@ router.get("/", function(req, res){
 // Web Scraping
 router.get("/scrape", function(req, res, next) {
   // Make a request for the news section of ycombinator
+    request("https://techcrunch.com/", function(error, response, html) {
+       var $ = cheerio.load(html);
+       var counter = 0;
+          var data = [];
+          var arrLength = $(".river-block").length;
+         $(".river-block").each(function(i, element) {
+            var result = {};
+            result.title = $(element).find("a").text();
+            result.link = $(element).find("a").attr("href");
+            result.summary = $(element).find("p").text();
+            var entry = new article(result);
+            entry.save(function(err, doc) {
+              if (err) {
+                console.log(err);
+              } else {
+                // console.log(doc);
+                data.push(doc);
+                if (data.length == arrLength){
+                  res.json(data);
+                }
+              }
+            }); // closes save
+          }); // this closes the .each
 
-  var requestPromise = new Promise(function(resolve, reject){
+    }); // this closes request
 
-  request("https://techcrunch.com/", function(error, response, html) {
-  	// console.log(html);
-	var data = [];
-    // Load the html body from request into cheerio
-    var $ = cheerio.load(html);
-    // For each element with a "title" class
-    $(".post-title").each(function(i, element) {
-
-    	var result = {};
-      	// Save the text of each link enclosed in the current element
-    	result.title = $(element).find("a").text();
-
-      	// Save the href value of each link enclosed in the current element
-      	result.link = $(element).find("a").attr("href");
-
-      	// Using our Article model, create a new entry
-      // This effectively passes the result object to the entry (and the title and link)
-      var entry = new article(result);
-      // Now, save that entry to the db
-
-      entry.save(function(err, doc) {
-      	// Log error
-      	if (err) {
-      		console.log(err);
-      	}
-      	// Or log the doc
-      	else {
-      		console.log(doc);
-      		res.json(doc);
-      		data.push(doc);
-      	}
-
-      }); // closes save
-
-	}); // this closes the  each 
-
-    resolve(data);
-  }); // this closes request
-
-	}); // this closes the promise
-
-
-  	requestPromise.then(function(data){
-  		console.log('this is the data');
-  		console.log(data);
-	  res.send(data);
-  });
-
-  // This will send a "Scrape Complete" message to the browser
-});
+}); // this closes the get route
 
 router.get("/articles", function(req, res) {
   // Grab every doc in the Articles array
@@ -129,9 +103,9 @@ router.post("/add/comment/:id", function (req, res) {
 		body: commentBody
 	}
 
-	var entry = new comment (result);
+	var newComment = new comment(result);
 
-	entry.save(function(err, docs) {
+	newComment.save(function(err, docs) {
 		if (error) {
 			console.log(err);
 		}
@@ -141,7 +115,7 @@ router.post("/add/comment/:id", function (req, res) {
 				if (err){
 					console.log(err);
 				} else {
-					res.sendStatus('Success');
+					res.send(docs);
 				}
 			});
 		}
@@ -155,7 +129,7 @@ router.post("/remove/comment/:id", function(req, res){
 		if (err) {
 			console.log(err);
 		} else {
-			res.sendStatus('Complete');
+			res.send(result);
 		}
 	});
 });

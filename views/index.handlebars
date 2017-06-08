@@ -1,22 +1,31 @@
 {{#each articles}}
-
-<ul class="collapsible" data-collapsible="accordion">
-
-  <li>
-    <div>
-      {{title}}
+<div id="articles"></div>
+<div id="accordion" role="tablist" aria-multiselectable="true">
+  
+  <div class="card">
+    <div class="card-header" role="tab" id="headingTwo">
+      <h5 class="mb-0">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        {{!-- <div id="title"></div> --}}
+          {{title}}
+        </a>
+      </h5>
     </div>
-    <div class="collapsible-body">
-      {{summary}}
-      <p><a href="{{link}}" target="_new">Click here</a> to read the full article</p>
-    </div>
-  </li>
-
-  <li>
-      <div class="collapse-header">
-        Add a Comment
+    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="card-block">
+          {{summary}}
+        <p><a href="{{link}}" target="_new">Click here</a> to read the full article</p>
       </div>
-      <div class="collapse-body">
+    </div>
+  </div>
+</div>
+
+<div class="comment-container">
+  <p>
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Add a Comment
+      </button>
+      <div class="collapse" id="collapseExample">
         <form id="form-add-{{_id}}" action="add/comment/{{_id}}" method="post">
           <div class="row">
             <div class="input-field col-sm-2"></div>
@@ -36,17 +45,18 @@
             <div class="row">
               <div class="input-field col-sm-2"></div>
               <div class="input-field col-sm-8">
-              <center><input class="btn add-comment-button" data-id="{{_id}}" type="submit" value="Submit"></center>
+              <center><input class="btn add-comment-button" data-id="{{_id}}" type="submit" value="Submit" id="submit-btn"></center>
               </div>
             </div>
-
         </form>
       </div>
-  </li>
-  <li>
-    <div class="collapsible-header">View Comments</div>
-    <div class="collapse-body">
-       {{!-- {{#if comments}} --}}
+  </p>
+  <p>
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
+        View Comments
+      </button>
+      <div class="collapse" id="collapseExample2">
+        {{!-- {{#if comments}} --}}
       <ul class="collection">
         {{!-- {{#each comments}} --}}
         <li class="collection-item">
@@ -57,16 +67,14 @@
               <input class="btn=small delete-comment-button" data-id="{{_id}}" type="submit" value="Delete" >
             </form>
           </span>
-
           {{content}}
         </li>
       </ul>
       {{else}}
         <p>No Comments</p>
-    {{!-- {{/if}} --}}
-    </div>
-   
-  </li>
+      {{!-- {{/if}} --}}
+      </div>
+  </p>
+</div>
 
-</ul>
 {{/each}}
