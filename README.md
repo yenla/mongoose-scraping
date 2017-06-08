@@ -73,5 +73,4 @@ Follow the steps below to interact with this site locally
             });
           });
     	});
-
 	});
