@@ -2,7 +2,6 @@
 $.getJSON("/articles", function(data) {
 // For each one
 for (var i = 0; i < data.length; i++) {
-  // Display the apropos information on the page
   // $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>" + data[i].summary + "</p>");
 
   $("#articles").append("<p>" + data[i].title + "<br />" + data[i].link + "<br />" + data[i].summary + "</p>");
@@ -13,8 +12,20 @@ for (var i = 0; i < data.length; i++) {
 
 $(document).on("click", "#submit-btn", function(){
 
-   var articleId = $(this).attr("data-id");
+  // var articleId = $(this).data('id');
 
+  // $.ajax({
+  //   method: 'POST',
+  //   url: 'add/comment/' + articleId,
+  //   data: {
+  //     body: $('#author_comment' + articleId).val()
+  //   }
+  // }).done(function (data){
+  //   console.log(data);
+  //   $('#author_comment' + articleId).val();
+  // });
+
+  var articleId = $(this).attr("data-id");
     // URL root (so it works in eith Local Host for Heroku)
     var baseURL = window.location.origin;
 
@@ -30,10 +41,22 @@ $(document).on("click", "#submit-btn", function(){
       data: form.serialize(),
     })
     .done(function(data) {
+
+      console.log(data);
+
+      $(".collection").append("<input id='author_name' name='comment' >");
+      $(".collection").append("<input id='author_comment' name='comment' >");
+      $(".collection").append("<button data-id='" + data._id + "' id='savenote'>Save Comment</button>");
+
+        if (data.note) {
+        // Place the title of the note in the title input
+        $("#titleinput").val(data.note.title);
+        // Place the body of the note in the body textarea
+        $("#bodyinput").val(data.note.body);
+      }
       // Refresh the Window after the call is done
       // location.reload();
 
-      console.log(data);
 
       // $(".collection").empty();
     });

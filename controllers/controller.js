@@ -16,14 +16,6 @@ var collections = ["scrapedData"];
 var comment = require("../models/comment.js");
 var article = require("../models/article.js");
 
-
-// // Hook mongojs configuration to the db variable
-// var db = mongojs(databaseUrl, collections);
-// db.on("error", function(error) {
-// 	console.log("Database Error:", error);
-// });
-
-
 // Index file
 router.get("/", function(req, res){
 	// res.redirect("/scrape");
@@ -40,7 +32,6 @@ router.get("/", function(req, res){
 		]
 	});
 });
-
 
 // Web Scraping
 router.get("/scrape", function(req, res, next) {
@@ -87,9 +78,7 @@ router.get("/articles", function(req, res) {
   });
 });
 
-
 // Add a Routing Comment
-
 router.post("/add/comment/:id", function (req, res) {
 
 	var articleId = req.params.id;

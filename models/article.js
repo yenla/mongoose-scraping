@@ -33,6 +33,7 @@ var ArticleSchema = new Schema({
   //   type: String
   //   default: moment().format('MMMM Do YYYY, h:mm A')
   // },
+  
 
   // Create a relation with the Comment model
   comments: [{
