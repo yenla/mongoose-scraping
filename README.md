@@ -12,7 +12,7 @@ Coming Soon.
 
 • JavaScript
 
-• node.js
+• Node.js
 
 • Express.js
 
@@ -20,11 +20,11 @@ Coming Soon.
 
 • Mongoose
 
-• body-parser
+• Body-parser
 
 • Cheerio
 
-• request
+• Request
 
 • HTML
 
