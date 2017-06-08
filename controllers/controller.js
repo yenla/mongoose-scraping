@@ -35,7 +35,7 @@ router.get("/", function(req, res){
 
 // Web Scraping
 router.get("/scrape", function(req, res, next) {
-  // Make a request for the news section of ycombinator
+  // Make a request for the news section of combinator
     request("https://techcrunch.com/", function(error, response, html) {
        var $ = cheerio.load(html);
        var counter = 0;

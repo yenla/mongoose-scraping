@@ -49,16 +49,16 @@ Follow the steps below to interact with this site locally
 • Below is example code on how to scrape articles from tech crunch
 
 	router.get("/scrape", function(req, res, next) {
-
     request("https://techcrunch.com/", function(error, response, html) {
        var $ = cheerio.load(html);
        var counter = 0;
           var data = [];
-          var arrLength = $(".post-title").length;
-         $(".post-title").each(function(i, element) {
+          var arrLength = $(".river-block").length;
+         $(".river-block").each(function(i, element) {
             var result = {};
             result.title = $(element).find("a").text();
             result.link = $(element).find("a").attr("href");
+            result.summary = $(element).find("p").text();
             var entry = new article(result);
             entry.save(function(err, doc) {
               if (err) {
@@ -72,5 +72,7 @@ Follow the steps below to interact with this site locally
               }
             });
           });
-    	});
-	});
+
+    });
+
+});
