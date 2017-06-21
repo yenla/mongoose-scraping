@@ -13,10 +13,26 @@ h1 img {
 	width: 32%;
 }
 
+p {
+    margin: 5px;
+    padding-top: 10px;
+}
+
+.section {
+    display: block;
+    cursor: pointer;
+    min-height: 3rem;
+    line-height: 3rem;
+    padding: 0 1rem;
+    margin: 0 0 3rem 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
 .title {
   color: #e40020;
   font-size: 20px;
-  /*font-family: 'Satisfy', cursive;*/
+  font-family: 'Satisfy', cursive;
   padding: 55px;
 }
 .container {
@@ -26,4 +42,20 @@ h1 img {
 
 .comment-container {
   /*background-color: blue;*/
+}
+
+.collapsible-header {
+}
+
+.card-block, .comment-container {
+  display: block;
+    cursor: pointer;
+    min-height: 3rem;
+    line-height: 3rem;
+    padding: 1rem 1rem 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.input-field {
+  padding: 5px 0 5px 20px;
 }

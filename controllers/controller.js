@@ -19,18 +19,30 @@ var article = require("../models/article.js");
 // Index file
 router.get("/", function(req, res){
 	// res.redirect("/scrape");
-	console.log("hit");
-	// res.send('ok');
-	res.render('index', {
-		articles: [
-			{ 
-				title: 'value',
-				summary: 'value',
-				link: 'value'
 
-			}
-		]
-	});
+  article.find({}, function(error, docs) {
+    // Log any errors
+    if (error) {
+      console.log(error);
+    }
+    // Or send the doc to the browser as a json object
+    else {
+    	// console.log(docs);
+      // res.json(doc);
+		res.render('index', {
+			// articles: [
+			// 	{ 
+			// 		title: 'value',
+			// 		summary: 'value',
+			// 		link: 'value'
+			// 	}
+			// ]
+			articles: docs
+		});
+    }
+  });
+	// console.log("hit");
+	// res.send('ok');
 });
 
 // Web Scraping
@@ -43,9 +55,17 @@ router.get("/scrape", function(req, res, next) {
           var arrLength = $(".river-block").length;
          $(".river-block").each(function(i, element) {
             var result = {};
-            result.title = $(element).find("a").text();
+
+            // Collect the Article Title
+            var title = $(element).find("a").text();
+            result.title = title.substr(0, title.length - 9) + ' Read More';
+           	
+           	// Collect the Article Link
             result.link = $(element).find("a").attr("href");
-            result.summary = $(element).find("p").text();
+            
+			// Collect the Article Summary
+            var summary = $(element).find("p").text();
+            result.summary = summary.substr(0, summary.length - 10);
             var entry = new article(result);
             entry.save(function(err, doc) {
               if (err) {
@@ -54,12 +74,21 @@ router.get("/scrape", function(req, res, next) {
                 // console.log(doc);
                 data.push(doc);
                 if (data.length == arrLength){
-                  res.json(data);
-                }
+                  // res.json(data);
+                  article.find({}, function(err, docs){
+    				if (err){
+    					console.log(err);
+    				} else {
+	                  res.render('index', {
+	                  	articles: docs
+	                  })
+    				}           	
+
+                  }) // closes article.find
+                } // closes if
               }
             }); // closes save
           }); // this closes the .each
-
     }); // this closes request
 
 }); // this closes the get route

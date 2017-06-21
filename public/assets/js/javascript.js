@@ -1,14 +1,14 @@
 
-$.getJSON("/articles", function(data) {
-// For each one
-for (var i = 0; i < data.length; i++) {
-  // $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>" + data[i].summary + "</p>");
+// $.getJSON("/articles", function(data) {
+// // For each one
+// for (var i = 0; i < data.length; i++) {
+//   // $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>" + data[i].summary + "</p>");
 
-  $("#articles").append("<p>" + data[i].title + "<br />" + data[i].link + "<br />" + data[i].summary + "</p>");
-  // $("#title").append("<p>" + data[i].title + "</p>");
+//   $("#articles").append("<p>" + data[i].title + "<br />" + data[i].link + "<br />" + data[i].summary + "</p>");
+//   // $("#title").append("<p>" + data[i].title + "</p>");
 
-  }
-});
+//   }
+// });
 
 $(document).on("click", "#submit-btn", function(){
 

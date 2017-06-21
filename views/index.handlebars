@@ -1,79 +1,105 @@
 {{#each articles}}
-<div id="articles"></div>
-<div id="accordion" role="tablist" aria-multiselectable="true">
-  
-  <div class="card">
-    <div class="card-header" role="tab" id="headingTwo">
-      <h5 class="mb-0">
-        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        {{!-- <div id="title"></div> --}}
-          {{this.title}}
-        </a>
-      </h5>
-    </div>
-    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-      <div class="card-block">
-          {{this.summary}}
-        <p><a href="{{this.link}}" target="_new">Click here</a> to read the full article</p>
-      </div>
-    </div>
-  </div>
-</div>
-{{/each}}
+  <ul class="collapsible" data-collapsible="accordion">
 
-<div class="comment-container">
-  <p>
-      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        Add a Comment
-      </button>
-      <div class="collapse" id="collapseExample">
-        <form id="form-add-{{_id}}" action="add/comment/{{_id}}" method="post">
+    <!-- Article Drop Down -->
+    <li class="section">
+      <div style="background-color: white;" class="collapsible-header grey lighten-2">
+        <div style="clear: left; line-height: 110%; padding: 10px 0 0 5px;"><b>{{this.title}}</b></div>
+      </div>
+      <div class="collapsible-body" style="background-color: white;">
+        <p>
+          {{this.summary}}
+
+          <br><br>
+
+          <i>Please read the full article <a href="{{this.link}}" target="_new">here</a>.</i>
+        </p>
+          
+      </div>
+    </li>
+
+
+    <!-- Add Comments Drop Down -->
+    <li class="section">
+      <div class="collapsible-header">{{!-- <i class="material-icons">comment</i>  --}}
+      Add a Comment</div>
+      <div class="collapsible-body" style="background-color: white;">
+
+        <form id="form-add-{{_id}}" action="add/comment/{{_id}}" method="post" style="background-color: white;">
+
+          <!-- Author Name Input -->
           <div class="row">
-            <div class="input-field col-sm-2"></div>
-            <div class="input-field col-sm-8">
-              <input id="author_name" type="text" name="name" class="author">
-              <label for="author_name">Enter Your Name:</label>
+            <div class="input-field col s2"></div>
+            <div class="input-field col s8">
+              <input id="author_name" name="name" type="text" class="validate">
+              <label for="author_name"> Your Name:</label>
             </div>
           </div>
           
+          <!-- Comment Input -->
           <div class="row">
-            <div class="input-field col-sm-2"></div>
-            <div class="input-field col-sm-8">
-              <input id="author_comment" type="text" name="comment" class="textarea">
-              <label for="author_comment">Enter Your Comment:</label>
+            <div class="input-field col s2"></div>
+            <div class="input-field col s8">
+              <textarea id="comment_box" name="comment" class="materialize-textarea"></textarea>
+              <label for="comment_box"> Your Reaction:</label>
             </div>
           </div>
+
+            <!-- Submit Button -->
             <div class="row">
-              <div class="input-field col-sm-2"></div>
-              <div class="input-field col-sm-8">
-              <center><input class="btn add-comment-button" data-id="{{_id}}" type="submit" value="Submit" id="submit-btn"></center>
+              <div class="input-field col s2"></div>
+              <div class="input-field col s8">
+              <center><input class="btn add-comment-button" data-id="{{_id}}" type="submit" value="Submit"></center>
               </div>
             </div>
+          
         </form>
-      </div>
-  </p>
-  <p>
-      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
-        View Comments
-      </button>
-      <div class="collapse" id="collapseExample2">
-        {{!-- {{#if comments}} --}}
-      <ul class="collection">
-        {{!-- {{#each comments}} --}}
-        <li class="collection-item">
-          <b>{{author}}</b>
 
-          <span class="badge">
-            <form id="form-delete-{{_id}}" action="remove/comment/{{_id}}" method="post">
-              <input class="btn=small delete-comment-button" data-id="{{_id}}" type="submit" value="Delete" >
-            </form>
-          </span>
-          {{content}}
-        </li>
-      </ul>
-      {{!-- {{else}} --}}
-        <p>No Comments</p>
-      {{!-- {{/if}} --}}
       </div>
-  </p>
-</div>
+    </li>
+
+
+    <!-- View Comments Drop Down -->
+    <li class="section">
+      <div class="collapsible-header">{{!-- <i class="material-icons">thumbs_up_down</i> --}} View Comments</div>
+      <div class="collapsible-body" style="background-color: white;">
+      
+        {{!-- Check if the article has comments --}}
+        {{#if comments}}
+
+          {{!-- Article has comments so iterate over them  --}}
+          <ul class="collection">
+            {{#each comments}}
+            
+              <li class="collection-item">
+
+                {{!-- Add Author Name --}}
+                <b>{{author}}</b> 
+
+                {{!-- Add a Delete Button --}}
+                <span class="badge">
+                  <form id="form-delete-{{_id}}" action="remove/comment/{{_id}}" method="post">
+                    <input class="btn-small delete-comment-button" data-id="{{_id}}" type="submit" value="Delete" style="color: white; background-color: red; border-color: red;">
+                  </form>
+                </span>
+
+                <br>
+
+                {{!-- Add the Content of the Comment --}}
+                {{content}}
+
+              </li> 
+            {{/each}}
+          </ul>
+        
+        {{!-- No comments, so display message --}}
+        {{else}}
+          <p>No Comments!!! </p>
+        {{/if}}
+            
+        
+      </div>
+    </li>
+
+  </ul>
+{{/each}}
